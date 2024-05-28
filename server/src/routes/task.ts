@@ -19,7 +19,9 @@ router.get('/:taskId', (req, res) => {
 			.status(404)
 			.send({ id: 'task not found', message: `task not found with id = ${taskId}` });
 
-	res.send({ task });
+	setTimeout(() => {
+		res.send({ task });
+	}, 2000);
 });
 
 router.post('/', (req, res) => {
