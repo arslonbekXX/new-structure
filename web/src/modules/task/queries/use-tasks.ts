@@ -6,15 +6,21 @@ interface Query {
 	tasks: Task[];
 }
 
-export const useTasks = () => {
+interface Params {
+	search: string;
+}
+
+export const useTasks = ({ search }: Params) => {
 	const initialData: Query = { tasks: [] };
 
 	const { data = initialData, ...args } = useQuery<Query>({
-		queryKey: ['task', 'list'],
+		queryKey: ['task', 'list', search],
 		queryFn: async () => {
 			const { data } = await http.get('/tasks');
 
-			const tasks: Task[] = (data.tasks || []).map(taskScheme.parse);
+			const tasks: Task[] = (data.tasks || [])
+				.map(taskScheme.parse)
+				.filter((task: Task) => task.title.toLowerCase().includes(search.toLowerCase()));
 
 			return { tasks };
 		},

@@ -1,7 +1,8 @@
 import React from 'react';
-import { useTask } from '../../modules/task';
+import { Forms, useTask } from '../../modules/task';
 import { useParams } from 'react-router-dom';
 import { Button, Skeleton } from 'antd';
+import New from './new';
 
 interface SingleProps {}
 
@@ -18,6 +19,9 @@ const Single: React.FC<SingleProps> = () => {
 
 	return (
 		<div className="container flex flex-col gap-2 mx-auto">
+			<div className="flex w-full justify-end">
+				<New />
+			</div>
 			<p>
 				<b>Title :</b> {task?.title}
 			</p>
@@ -29,9 +33,8 @@ const Single: React.FC<SingleProps> = () => {
 			</p>
 
 			<Button.Group>
-				<Button>Edit</Button>
-				<Button>Delete</Button>
 				<Button>Update</Button>
+				<Forms.Delete defaultValues={{ id: taskId! }} />
 			</Button.Group>
 		</div>
 	);

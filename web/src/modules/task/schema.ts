@@ -13,8 +13,8 @@ export const taskStatusSchema = z.enum([
 
 export const taskScheme = z.object({
 	id: z.string(),
-	title: z.string(),
-	description: z.string(),
+	title: z.coerce.string(),
+	description: z.coerce.string(),
 	status: taskStatusSchema,
 });
 

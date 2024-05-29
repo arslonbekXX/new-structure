@@ -7,6 +7,8 @@ import { message } from 'antd';
 import { ZodError } from 'zod';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AxiosError } from 'axios';
+import { QueryParamProvider } from 'use-query-params';
+import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 
 const client = new QueryClient({
 	defaultOptions: {
@@ -34,7 +36,9 @@ const client = new QueryClient({
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<QueryClientProvider client={client}>
 		<BrowserRouter>
-			<Routes />
+			<QueryParamProvider adapter={ReactRouter6Adapter}>
+				<Routes />
+			</QueryParamProvider>
 		</BrowserRouter>
 		<ReactQueryDevtools />
 	</QueryClientProvider>

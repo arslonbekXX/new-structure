@@ -1,25 +1,37 @@
-import { Button, Table, Tag } from 'antd';
+import { Button, Input, Table, Tag } from 'antd';
 import React from 'react';
-import { Task, useTasks } from '../../modules/task';
+import { useTasks } from '../../modules/task';
 import { useNavigate } from 'react-router-dom';
-import { ColumnsType } from 'antd/es/table';
+import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
+import New from './new';
 
-interface ListProps {}
-
-const List: React.FC<ListProps> = (props) => {
-	const { tasks, isLoading, isFetching } = useTasks();
+const List: React.FC = () => {
 	const navigate = useNavigate();
+	const [{ page, search }, setParams] = useQueryParams({
+		search: withDefault(StringParam, ''),
+		page: withDefault(NumberParam, 1),
+	});
+	const { tasks, isLoading, isFetching } = useTasks({ search: search! });
 
 	return (
 		<div className="flex flex-col gap-2 container mx-auto">
 			<p className="font-bold">Tasks List</p>
+			<div className="flex w-full justify-between">
+				<Input
+					value={search || ''}
+					onChange={(e) => setParams({ search: e.target.value, page: 1 })}
+					placeholder="Search"
+					className="w-[400px]"
+				/>
+				<New />
+			</div>
 			<Table
-				pagination={false}
 				dataSource={tasks}
 				rowKey="id"
 				loading={isLoading || isFetching}
 				rowClassName="cursor-pointer"
 				onRow={(record) => ({ onClick: () => navigate(`/tasks/${record.id}`) })}
+				pagination={{ current: page, onChange: (page) => setParams({ page }) }}
 				columns={[
 					{
 						dataIndex: 'id',
